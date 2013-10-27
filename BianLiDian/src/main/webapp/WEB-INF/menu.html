@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width" />
+<title>首页</title>
+</head>
+<body>
+	<script
+		src="http://bianlidian.guangshenbian.com/BianLiDian/resources/js/jquery-2.0.3.min.js"></script>
+	<script>
+		$
+				.ajax({
+					url : "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=eMq2C-ZFrdB0eRp9lYYi8PkeTd1I9Vn5r5O_pPMQ6dAGhcO9e3irzZgOBrJO_nOYzPML1LVs6qAB5TiAmyKcQAT1H0VRXPv2WEGhGIoknYQQ6QTz4Z_gJbgUq5TsekoXe44wBDQlEi5bdWsF2jNUcA",
+					data : {
+						"button" : [ {
+							"type" : "click",
+							"name" : "商品",
+							"key" : "V1000_BIANLIDIAN_GOODS"
+						} ]
+					},
+					type : "POST",
+					success : function(data) {
+						alert(data);
+					},
+					dataType : "json"
+				});
+	</script>
+</body>
+</html>

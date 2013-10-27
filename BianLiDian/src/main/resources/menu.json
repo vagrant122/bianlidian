@@ -1,0 +1,8 @@
+{
+     "button":[
+     {	
+          "type":"click",
+          "name":"商品",
+          "key":"V1000_BIANLIDIAN_GOODS"
+      }
+ }
