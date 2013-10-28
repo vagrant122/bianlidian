@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
-	<!-- a pooling based JMS provider -->
-	<bean id="jmsFactory" class="org.apache.activemq.pool.PooledConnectionFactory"
-		destroy-method="stop">
-		<property name="connectionFactory">
-			<bean class="org.apache.activemq.ActiveMQConnectionFactory">
-				<property name="brokerURL">
-					<value>tcp://localhost:61616</value>
-				</property>
-			</bean>
-		</property>
-	</bean>
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit-1.2.xsd">
 
-	<bean id="queue" class="org.apache.activemq.command.ActiveMQQueue">
-		<constructor-arg value="mmm" />
-	</bean>
+	<rabbit:connection-factory id="connectionFactory"
+		channel-cache-size="5" />
+
+	<rabbit:admin connection-factory="connectionFactory" />
+
+	<rabbit:template id="template" routing-key="myQueue"
+		connection-factory="connectionFactory" />
+
+	<rabbit:queue name="myQueue" />
 </beans>  
