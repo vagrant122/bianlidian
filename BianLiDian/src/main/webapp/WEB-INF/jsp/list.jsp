@@ -97,21 +97,27 @@ body {
 								style="width: 107px; height: 93px; top: 20px; left: 30px; border-width: 0px;"
 								src="${pageContext.request.contextPath}/resources/image/放入购物车图标.png"></img>
 						</div>
-						<img src="${item.imgUrl }" height="${item.imgHeight }"
-							width="${item.imgWidth }"
+						<img
+							src="${pageContext.request.contextPath}/resources/image/loading.gif"
+							data-original="${item.imgUrl }" height="${item.imgHeight }"
+							width="${item.imgWidth }" class="lazy"
 							onclick="increaseShopping(${item.id},'${openId}')"></img>
 					</div>
 				</c:forEach>
 			</div>
 		</div>
 	</div>
+	<jsp:include page="footer.jsp" />
 	<script
 		src="${pageContext.request.contextPath}/resources/js/masonry.pkgd.min.js"></script>
-	<jsp:include page="footer.jsp" />
+	<script
+		src="${pageContext.request.contextPath}/resources/js/jquery.lazyload.min.js"></script>
 	<script type="text/javascript">
 	var myScroll;
 	function loaded() {
-		myScroll = new iScroll('wrapper');
+		myScroll = new iScroll('wrapper',{onScrollEnd:function(){  
+			$("#wrapper").trigger('scroll');
+        }});
 	}
 	document.addEventListener('DOMContentLoaded', loaded, false);
 	
@@ -151,6 +157,8 @@ body {
 	    timestamp=current;
 	}
 	timer=window.setInterval(checkResume,100);
+	
+	$("img.lazy").lazyload({ threshold : 100 });
 </script>
 </body>
 </html>
