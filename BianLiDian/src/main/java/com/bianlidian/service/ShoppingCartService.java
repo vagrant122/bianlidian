@@ -3,12 +3,10 @@ package com.bianlidian.service;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import org.apache.catalina.Session;
 import org.apache.commons.math3.random.RandomDataGenerator;
 import org.apache.commons.math3.util.Precision;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jms.core.JmsTemplate;
-import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +18,6 @@ import com.bianlidian.model.Items;
 import com.bianlidian.model.Order;
 import com.bianlidian.model.OrderItem;
 import com.bianlidian.model.ShoppingCart;
-import com.bianlidian.util.Message;
 import com.bianlidian.util.PriceUtils;
 import com.bianlidian.util.ServiceUtils;
 
@@ -36,9 +33,7 @@ public class ShoppingCartService {
 	@Autowired
 	private AddressService addressService;
 	@Autowired
-	private JmsTemplate jmsTemplate;
-	@Autowired
-	private ActiveMQQueue queueDestination;
+	private RabbitTemplate template;
 
 	public List<ShoppingCart> findAll(String openId) {
 		return shoppingDAO.findAll(openId);
@@ -160,11 +155,7 @@ public class ShoppingCartService {
 		}
 		deleteAllItem(openId);
 
-		jmsTemplate.send(queueDestination, new MessageCreator() {
-			public Message createMessage(Session session) {
-				return session.createTextMessage(message);
-			}
-		});
+		template.convertAndSend("new order!!");
 
 		return orderNumber;
 	}

@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bianlidian.Constant;
 import com.bianlidian.model.ItemsCategory;
@@ -38,5 +39,13 @@ public class IndexAction {
 		}
 
 		return "index";
+	}
+
+	@RequestMapping("test")
+	public @ResponseBody
+	String test() {
+		categoryService.test();
+		System.out.println("Sent: new order!!");
+		return "test";
 	}
 }

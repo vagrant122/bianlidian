@@ -1,21 +1,21 @@
 package com.bianlidian.desk.util;
 
 import java.io.InputStream;
-import java.util.Calendar;
-import java.util.Date;
 
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
 
 import org.apache.log4j.Logger;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
+import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 
 import com.bianlidian.desk.javafx.MainScene;
-import com.bianlidian.desk.service.OrderService;
 
 public class OrderAlerter extends Thread {
 	private Logger log = Logger.getLogger(this.getClass());
-	private Date lastTime = Calendar.getInstance().getTime();
 	private MainScene mainScene;
 	private Sequencer midi;
 	private Sequence seq;
@@ -24,8 +24,8 @@ public class OrderAlerter extends Thread {
 		mainScene = scene;
 		try {
 			InputStream sound = OrderAlerter.class.getClassLoader()
-			// .getResourceAsStream("resources/sound/sound.mid");
-					.getResourceAsStream("sound/sound.mid");
+					.getResourceAsStream("resources/sound/sound.mid");
+			// .getResourceAsStream("sound/sound.mid");
 			seq = MidiSystem.getSequence(sound);
 			midi = MidiSystem.getSequencer();
 
@@ -38,31 +38,23 @@ public class OrderAlerter extends Thread {
 
 	@Override
 	public void run() {
+		ConnectionFactory cf = new CachingConnectionFactory("121.199.60.251");
+		// set up the listener and container
+		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer(
+				cf);
+		Object listener = new Object() {
+			public void handleMessage(String message) {
+				System.out.println(message);
+				playBeep();
+			}
+		};
+		MessageListenerAdapter adapter = new MessageListenerAdapter(listener);
+		container.setMessageListener(adapter);
+		container.setQueueNames("myQueue");
+		container.start();
+
 		if (log.isDebugEnabled()) {
 			log.debug("OrderAlerter started!");
-		}
-		while (true) {
-			try {
-				Integer num = OrderService.hasNewOrder(lastTime,
-						mainScene.getOrderStatus());
-				if (num > 0) {
-					mainScene.updateOrders();
-				}
-				num = OrderService.hasNewOrder(lastTime, OrderService.CREATED);
-				if (num > 0) {
-					if (log.isDebugEnabled()) {
-						log.debug("OrderAlerter find " + num + " orders after "
-								+ lastTime);
-					}
-					playBeep();
-				}
-				Calendar calendar = Calendar.getInstance();
-				calendar.add(Calendar.SECOND, -1);
-				lastTime = calendar.getTime();
-				Thread.sleep(3 * 1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
 		}
 	}
 
@@ -99,5 +91,10 @@ public class OrderAlerter extends Thread {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+
+	public static void main(String[] args) {
+		OrderAlerter alerter = new OrderAlerter(new MainScene());
+		alerter.start();
 	}
 }
