@@ -8,11 +8,11 @@
 
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"></property>
-		<property name="typeAliasesPackage" value="com.bianlidian.model" />
-		<property name="typeHandlersPackage" value="com.bianlidian.dao" />
+		<property name="typeAliasesPackage" value="com.bohua.bianlidian.model" />
+		<property name="typeHandlersPackage" value="com.bohua.bianlidian.dao" />
 	</bean>
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.bianlidian.dao" />
+		<property name="basePackage" value="com.bohua.bianlidian.dao" />
 	</bean>
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

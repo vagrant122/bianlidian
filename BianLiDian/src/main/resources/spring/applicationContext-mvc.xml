@@ -23,7 +23,7 @@
 				class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
 		</mvc:message-converters>
 	</mvc:annotation-driven>
-	<context:component-scan base-package="com.bianlidian" />
+	<context:component-scan base-package="com.bohua.bianlidian" />
 	<context:annotation-config />
 	<tx:annotation-driven />
 	<mvc:resources mapping="/resources/**" location="/resources/"
@@ -39,8 +39,8 @@
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
 
-	<bean id="messageHandler" class="com.bianlidian.util.MessageHandler" />
+	<bean id="messageHandler" class="com.bohua.bianlidian.util.MessageHandler" />
 	<mvc:interceptors>
-		<bean class="com.bianlidian.interceptor.BianLiDianIntercepor" />
+		<bean class="com.bohua.bianlidian.interceptor.BianLiDianIntercepor" />
 	</mvc:interceptors>
 </beans>

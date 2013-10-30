@@ -33,7 +33,7 @@ public interface OrderDAO {
 	@Select("select * from orders where status=#{status} order by id desc limit #{index},#{pageSize}")
 	@Results(value = {
 			@Result(property = "id", column = "id"),
-			@Result(property = "items", column = "id", javaType = List.class, many = @Many(select = "com.bianlidian.dao.OrderItemDAO.findAllItems")) })
+			@Result(property = "items", column = "id", javaType = List.class, many = @Many(select = "com.bohua.bianlidian.dao.OrderItemDAO.findAllItems")) })
 	public List<Order> findAll(@Param("index") int index,
 			@Param("pageSize") int pageSize, @Param("status") String status);
 
@@ -44,7 +44,7 @@ public interface OrderDAO {
 	@Select("select * from orders where status='已提交' and orderNumber=#{orderNum} order by id desc limit 0,1")
 	@Results(value = {
 			@Result(property = "id", column = "id"),
-			@Result(property = "items", column = "id", javaType = List.class, many = @Many(select = "com.bianlidian.dao.OrderItemDAO.findAllItems")) })
+			@Result(property = "items", column = "id", javaType = List.class, many = @Many(select = "com.bohua.bianlidian.dao.OrderItemDAO.findAllItems")) })
 	public Order findSubmittedOrder(@Param("orderNum") String orderNum);
 
 	@Update("update orders set delivery=#{delivery},updateDate=#{updateDate} where (delivery is null or delivery='') and status!='已提交' and openId=#{openId}")
